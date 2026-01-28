@@ -24,6 +24,13 @@ public class TestConfig {
 	public CommandLineRunner run(AssetRepository assetRepo, WalletRepository walletRepo,
 			TransactionRepository transRepo) {
 		return args -> {
+			
+			if (walletRepo.count() > 0) {
+                System.out.println("---------------------------------");
+                System.out.println("BANCO JÁ POPULADO. PULANDO CARGA INICIAL.");
+                System.out.println("---------------------------------");
+                return; 
+            }
 			// 1. Criar Carteira
 			Wallet w1 = new Wallet();
 			w1.setName("Minha Trezor");
