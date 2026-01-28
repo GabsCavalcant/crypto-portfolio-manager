@@ -1,10 +1,12 @@
 package com.gabriel.cryptodashboard.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.math.RoundingMode;
 
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,13 @@ import com.gabriel.cryptodashboard.repository.TransactionRepository;
 public class WalletService {
 
 	private final TransactionRepository transactionRepository;
+	
+	private final CryptoPriceService cryptoPriceService;
 
-	public WalletService(TransactionRepository transactionRepository) {
+	public WalletService(TransactionRepository transactionRepository, CryptoPriceService cryptoPriceService) {
 
 		this.transactionRepository = transactionRepository;
+		this.cryptoPriceService = cryptoPriceService;
 	}
 
 	// Listar Todas as transacoes da carteira.
@@ -59,7 +64,31 @@ public class WalletService {
 			}
 
 			if (quantidadeTotal.compareTo(BigDecimal.ZERO) > 0) {
-				portfolio.add(new PortfolioItemDto(symbol, nomeAtivo, quantidadeTotal, valorInvestido));
+				// --- A MÁGICA ACONTECE AQUI ---
+                // 1. Busca o preço atual na internet (R$)
+                Double precoAtualDouble = cryptoPriceService.consultarPreco(symbol);
+                BigDecimal precoAtual = BigDecimal.valueOf(precoAtualDouble);
+
+                // 2. Calcula quanto vale hoje (Qtd * Preço Atual)
+                BigDecimal valorAtualTotal = quantidadeTotal.multiply(precoAtual);
+
+                // 3. Calcula Lucro/Prejuízo %
+                // Fórmula: ((ValorAtual - Investido) / Investido) * 100
+                BigDecimal lucroPorcentagem = BigDecimal.ZERO;
+                if (valorInvestido.compareTo(BigDecimal.ZERO) > 0) {
+                     lucroPorcentagem = valorAtualTotal.subtract(valorInvestido)
+                            .divide(valorInvestido, 4, RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(100));
+                }
+
+                portfolio.add(new PortfolioItemDto(
+                        symbol, 
+                        nomeAtivo, 
+                        quantidadeTotal, 
+                        valorInvestido, 
+                        valorAtualTotal, 
+                        lucroPorcentagem 
+                ));
 			}
 
 			
