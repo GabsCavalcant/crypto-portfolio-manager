@@ -20,9 +20,17 @@ public class AssetService {
         return assetRepository.findAll();
     }
 
+    // --- A MUDANÇA É AQUI ---
     public Asset save(Asset asset) {
-        // Exemplo de regra de negócio futura:
-        // if (assetRepository.findBySymbol(asset.getSymbol()) != null) { ... lança erro ... }
+        // 1. Antes de salvar, busca se já existe pelo Símbolo (Ex: BTC)
+        Asset existing = assetRepository.findBySymbol(asset.getSymbol());
+        
+        // 2. Se existir, retorna o que achou e NÃO salva de novo
+        if (existing != null) {
+            return existing;
+        }
+        
+        // 3. Se não existir, aí sim salva
         return assetRepository.save(asset);
     }
 }

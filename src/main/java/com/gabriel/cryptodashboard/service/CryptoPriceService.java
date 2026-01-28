@@ -1,46 +1,62 @@
 package com.gabriel.cryptodashboard.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient; // Certifique-se de importar este
-
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class CryptoPriceService {
 
-    private final RestClient restClient;
+    // 1. O Cache: Guarda o preço e a hora da última consulta
+    private final Map<String, Double> cachePrecos = new HashMap<>();
+    private final Map<String, Long> cacheTempo = new HashMap<>();
+    
+    // Tempo de vida do cache (em milissegundos)
+    // 60.000 ms = 1 minuto. O sistema só vai na internet se o preço for mais velho que isso.
+    private static final long TEMPO_EXPIRACAO = 60000; 
 
-    public CryptoPriceService() {
-        
-        this.restClient = RestClient.create("https://api.coingecko.com/api/v3");
-    }
+    public Double consultarPreco(String coinId) {
+        // Normaliza para minúsculo para evitar chaves duplicadas (Bitcoin vs bitcoin)
+        String id = coinId.toLowerCase();
 
-    public Double consultarPreco(String assetSymbol) {
-        // Truque simples: CoinGecko usa IDs (bitcoin), nosso banco usa Símbolos (BTC)
-        // Em um sistema real, salvaríamos o "slug" no banco, mas aqui vamos improvisar um Map
-        String coinId = switch (assetSymbol.toUpperCase()) {
-            case "BTC" -> "bitcoin";
-            case "ETH" -> "ethereum";
-            case "SOL" -> "solana";
-            default -> "bitcoin"; // Fallback
-        };
+        // 2. Verifica se já temos esse preço salvo e se ele ainda é "fresco"
+        if (cachePrecos.containsKey(id) && cacheTempo.containsKey(id)) {
+            long ultimaVez = cacheTempo.get(id);
+            if (System.currentTimeMillis() - ultimaVez < TEMPO_EXPIRACAO) {
+                System.out.println("LOG: Usando preço do CACHE para: " + id);
+                return cachePrecos.get(id);
+            }
+        }
+
+        // 3. Se não tem no cache (ou venceu), vai na API buscar
+        String url = "https://api.coingecko.com/api/v3/simple/price?ids=" + id + "&vs_currencies=brl";
+        RestTemplate restTemplate = new RestTemplate();
 
         try {
-            
-            Map response = restClient.get()
-                    .uri("/simple/price?ids={id}&vs_currencies=brl", coinId)
-                    .retrieve()
-                    .body(Map.class);
-          
-            Map<String, Object> moedaMap = (Map<String, Object>) response.get(coinId);
-            Object preco = moedaMap.get("brl");
-            
-           
-            return Double.valueOf(preco.toString());
+            System.out.println("LOG: Buscando na API CoinGecko: " + id);
+            Map<String, Map<String, Double>> response = restTemplate.getForObject(url, Map.class);
 
+            if (response != null && response.containsKey(id)) {
+                Double preco = response.get(id).get("brl");
+                
+                // Salva no cache para a próxima vez
+                cachePrecos.put(id, preco);
+                cacheTempo.put(id, System.currentTimeMillis());
+                
+                return preco;
+            }
+        } catch (HttpClientErrorException.TooManyRequests e) {
+            System.err.println("ERRO 429: Calma! Muitas requisições. Usando último valor conhecido se existir.");
+            // Se formos bloqueados, tentamos devolver o valor antigo se tivermos
+            if (cachePrecos.containsKey(id)) return cachePrecos.get(id);
+            return 0.0;
         } catch (Exception e) {
-            System.out.println("Erro ao buscar preço para " + assetSymbol + ": " + e.getMessage());
-            return 0.0; 
+            System.err.println("Erro ao buscar preço para " + id + ": " + e.getMessage());
         }
+
+        // Se der tudo errado e não tiver cache, retorna 0
+        return cachePrecos.getOrDefault(id, 0.0);
     }
 }

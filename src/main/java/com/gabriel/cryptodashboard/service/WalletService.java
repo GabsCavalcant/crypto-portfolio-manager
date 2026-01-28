@@ -48,7 +48,9 @@ public class WalletService {
 
 			for (Transaction t : transacoesDoAtivo) {
 				nomeAtivo = t.getAsset().getName();
-
+				
+			
+				
 				// Lógica simples: COMPRA soma, VENDA subtrai
 				if (t.getType() == TransactionType.BUY) {
 					quantidadeTotal = quantidadeTotal.add(t.getQuantity());
@@ -64,7 +66,7 @@ public class WalletService {
 			}
 
 			if (quantidadeTotal.compareTo(BigDecimal.ZERO) > 0) {
-				// --- A MÁGICA ACONTECE AQUI ---
+				
                 // 1. Busca o preço atual na internet (R$)
                 Double precoAtualDouble = cryptoPriceService.consultarPreco(symbol);
                 BigDecimal precoAtual = BigDecimal.valueOf(precoAtualDouble);
@@ -81,20 +83,24 @@ public class WalletService {
                             .multiply(BigDecimal.valueOf(100));
                 }
 
-                portfolio.add(new PortfolioItemDto(
-                        symbol, 
-                        nomeAtivo, 
-                        quantidadeTotal, 
-                        valorInvestido, 
-                        valorAtualTotal, 
-                        lucroPorcentagem 
-                ));
-			}
+                BigDecimal lucroValor = valorAtualTotal.subtract(valorInvestido);
+
+             // 4. Adicionar na lista com a ordem correta )
+             portfolio.add(new PortfolioItemDto(
+                     symbol, 
+                     nomeAtivo, 
+                     quantidadeTotal, 
+                     valorAtualTotal,   // Valor Bruto Atual
+                     lucroPorcentagem,  // % de Lucro
+                     valorInvestido,    // Investido
+                     lucroValor         // do Lucro
+             ));
 
 			
 
 		}
-		return portfolio;
+		
 	}
-
-}
+		return portfolio;
+	
+	}}

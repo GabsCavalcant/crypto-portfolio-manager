@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CriptoCant Wallet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="background-blur"></div>
+	
+    <div id="market-ticker-bar" class="market-ticker-container">
+        <div class="loading-ticker">Carregando cotações...</div>
+	</div>
+
+    <div class="app-container">
+        
+		<header>
+		    <div class="logo">
+		        <i class="fa-brands fa-bitcoin"></i> CriptoCant
+		    </div>
+		    
+		    <div class="wallet-selector">
+		        <select id="wallet-select" onchange="mudarCarteira()">
+		            <option value="" disabled selected>Selecione...</option>
+		        </select>
+		        <button class="btn-icon" onclick="abrirModalCarteira()" title="Criar Nova Carteira">
+		            <i class="fa-solid fa-plus"></i>
+		        </button>
+		    </div>
+
+		    <button class="btn-new" onclick="abrirModal()">
+		        <i class="fa-solid fa-plus"></i> Nova Transação
+		    </button>
+		</header>
+
+        <section class="wallet-card">
+            <div class="card-chip"></div>
+            <div class="card-details">
+                <span class="card-label">Saldo Total Estimado</span>
+                <h1 id="saldo-total">R$ 0,00</h1>
+                
+                <div class="card-footer">
+                    <div>
+                        <span class="card-label">Investido</span>
+                        <p id="total-investido">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <span class="card-label">Rentabilidade</span>
+                        <p id="lucro-total" class="pill">0%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <h2 class="section-title">Meus Ativos</h2>
+        <div id="assets-grid" class="assets-grid">
+            <div class="loading">Selecione uma carteira...</div>
+        </div>
+
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <h3>Nova Transação</h3>
+            <form id="form-transacao" onsubmit="enviarTransacao(event)">
+                <div class="form-group">
+                    <label>Ativo (Símbolo)</label>
+                    <input type="text" id="symbol" placeholder="Ex: BTC" required style="text-transform: uppercase;">
+                </div>
+                <div class="form-group">
+                    <label>Quantidade</label>
+                    <input type="number" id="quantity" step="0.00000001" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label>Preço Pago (Unitário)</label>
+                    <input type="number" id="price" step="0.01" placeholder="R$" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="type">
+                        <option value="BUY">Comprar (Buy)</option>
+                        <option value="SELL">Vender (Sell)</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-confirm">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+	<div id="modal-wallet" class="modal-overlay">
+	    <div class="modal">
+	        <h3>Criar Nova Carteira</h3>
+            <div class="form-group">
+                <label>Nome da Carteira</label>
+                <input type="text" id="wallet-name" placeholder="Ex: Investimentos, Reserva..." required>
+            </div>
+	        <div class="modal-buttons">
+	            <button class="btn-cancel" onclick="fecharModalCarteira()">Cancelar</button>
+	            <button class="btn-confirm" onclick="salvarNovaCarteira()">Criar</button>
+	        </div>
+	    </div>
+	</div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

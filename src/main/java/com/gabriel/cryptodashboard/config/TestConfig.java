@@ -1,4 +1,4 @@
-package com.gabriel.cryptodashboard;
+package com.gabriel.cryptodashboard.config;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import com.gabriel.cryptodashboard.repository.WalletRepository;
 @Configuration
 public class TestConfig {
 
-	@Bean
+	/*/ @Bean
 	public CommandLineRunner run(AssetRepository assetRepo, WalletRepository walletRepo,
 			TransactionRepository transRepo) {
 		return args -> {
@@ -67,5 +67,5 @@ public class TestConfig {
 			System.out.println("Transação registrada: " + t1.getTotalValue());
 			System.out.println("---------------------------------");
 		};
-	}
+	}/*/
 }
