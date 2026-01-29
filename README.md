@@ -6,6 +6,10 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
+**Sistema Arquitetado De Pastas**
+<img width="467" height="285" alt="image" src="https://github.com/user-attachments/assets/953d1ed4-3a55-4152-813a-95c89c07fb4a" />
+
+
 > **CriptoCant** é uma aplicação Fullstack para gerenciamento de portfólio de criptomoedas. O sistema permite criar múltiplas carteiras, registrar transações de compra/venda e acompanhar a rentabilidade em tempo real, integrando-se diretamente com o mercado global
 ## 🗄️ Modelagem de Dados (Database Schema)
 
