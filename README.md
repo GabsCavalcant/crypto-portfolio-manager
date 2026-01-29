@@ -1,4 +1,3 @@
-<img width="623" height="292" alt="image" src="https://github.com/user-attachments/assets/9e55e012-80e1-48d9-a750-7b7082794d28" /># 💰 CriptoCant - Dashboard de Investimentos Cripto
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
