@@ -1,5 +1,5 @@
 // --- CONFIGURAÇÕES GLOBAIS ---
-const API_URL = "";
+const API_URL = "http://localhost:8080/api";
 
 // Tenta pegar a última carteira usada. Se não tiver, começa como null (vai forçar pegar a primeira da lista)
 let WALLET_ID = localStorage.getItem("selectedWalletId"); 

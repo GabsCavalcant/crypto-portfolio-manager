@@ -21,16 +21,19 @@ body {
     justify-content: center;
 }
 
-/* Container Principal */
+/* --- CONTAINER PRINCIPAL --- */
 .app-container {
     width: 100%;
-    max-width: 480px; /* Estilo Mobile/App */
+    /* Aumentei para 1100px para caber Carteira + Mercado lado a lado */
+    max-width: 1100px; 
+    margin: 0 auto;
     padding: 20px;
-    position: relative;
-    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; -> Removido para permitir que os painéis estiquem */
 }
 
-/* Header */
+/* --- HEADER --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -58,32 +61,73 @@ header {
 }
 .btn-new:hover { background: rgba(255,255,255,0.2); }
 
-/* Cartão Principal (Wallet) */
-.wallet-card {
-    background: linear-gradient(135deg, #7b4397, #dc2430);
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(220, 36, 48, 0.3);
+/* --- SEÇÃO DE DESTAQUE (HERO: Carteira + Mercado) --- */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Garante mesma altura */
+    gap: 20px;
+    width: 100%;
     margin-bottom: 40px;
-    position: relative;
-    overflow: hidden;
+    flex-wrap: wrap; /* Responsivo: cai pra baixo no celular */
 }
 
+/* CARTÃO DA CARTEIRA */
+.wallet-card {
+    flex: 2; /* Ocupa 2/3 do espaço */
+    min-width: 320px;
+    /* MUDANÇA 1: Fundo gradiente Preto/Grafite */
+    background: linear-gradient(135deg, #2c2c2e, #000000);
+    padding: 30px;
+    border-radius: 25px;
+    /* MUDANÇA 2: Sombra e Borda Douradas (Golden) */
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: white; /* Texto base branco */
+}
+
+/* Efeito de luz sutil no fundo */
 .wallet-card::before {
     content: '';
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    /* Reflexo dourado muito suave */
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 60%);
     pointer-events: none;
 }
 
-.card-label { font-size: 12px; opacity: 0.8; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-.wallet-card h1 { margin: 0 0 20px 0; font-size: 36px; font-weight: 600; }
+/* Labels pequenos em Dourado */
+.wallet-card .card-label {
+    font-size: 12px;
+    /* Cor Dourada */
+    color: #FFD700;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
 
+/* Saldo Principal (Branco para destacar no preto) */
+.wallet-card h1 {
+    margin: 0 0 20px 0;
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Rodapé do cartão */
 .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
-.card-footer p { margin: 0; font-weight: 600; font-size: 18px; }
 
+/* Valores inferiores em branco */
+.card-footer p { margin: 0; font-weight: 600; font-size: 18px; color: #ffffff;}
+
+/* As pills (verde/vermelha) continuam funcionando igual, mas agora destacam mais no fundo preto */
 .pill {
     background: rgba(0,0,0,0.2);
     padding: 5px 12px;
@@ -91,6 +135,66 @@ header {
     font-size: 14px !important;
 }
 
+/* PAINEL LATERAL DE MERCADO */
+.market-side-panel {
+    flex: 1; /* Ocupa 1/3 do espaço */
+    min-width: 280px;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+}
+
+.market-side-panel h3 {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+/* Lista Vertical de Moedas */
+.market-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 300px;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+}
+
+.market-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between; /* Texto esquerda, Preço direita */
+    align-items: center;
+    transition: transform 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.market-card:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+}
+
+.ticker-symbol { color: #fff; font-size: 0.9rem; font-weight: bold; }
+.ticker-price { color: var(--success); font-size: 0.95rem; font-weight: 600; }
+.loading-ticker { text-align: center; color: #aaa; padding: 20px; font-size: 0.9rem; }
+
+
+/* --- SELETOR DE CARTEIRA --- */
 .wallet-selector {
     display: flex;
     align-items: center;
@@ -110,11 +214,7 @@ header {
     cursor: pointer;
     outline: none;
 }
-
-#wallet-select option {
-    background: #1e1e2f; /* Cor de fundo das opções para não ficar transparente */
-    color: white;
-}
+#wallet-select option { background: #1e1e2f; color: white; }
 
 .btn-icon {
     background: transparent;
@@ -127,27 +227,32 @@ header {
 }
 .btn-icon:hover { transform: scale(1.2); }
 
-/* Grid de Ativos */
+/* --- GRID DE MEUS ATIVOS --- */
 .section-title { font-size: 18px; margin-bottom: 15px; color: var(--text-secondary); }
 
 .assets-grid {
+    width: 100%;
     display: grid;
-    gap: 15px;
+    /* Cards automáticos com minimo de 200px */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 20px;
 }
 
 .asset-card {
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255,255,255,0.05);
     border-radius: 16px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
+    height: 140px;
     backdrop-filter: blur(10px);
     transition: transform 0.2s;
 }
+.asset-card:hover { transform: translateY(-5px); }
 
-.asset-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+.asset-header { display: flex; align-items: center; gap: 15px; }
 
 .asset-icon {
     width: 45px; height: 45px;
@@ -158,20 +263,26 @@ header {
     justify-content: center;
     font-weight: bold;
     font-size: 14px;
-    margin-right: 15px;
 }
 
-.asset-info h4 { margin: 0; font-size: 16px; }
+.asset-info h3 { margin: 0; font-size: 16px; color: white; }
 .asset-info span { font-size: 12px; color: var(--text-secondary); }
 
-.asset-values { text-align: right; }
-.asset-values h4 { margin: 0; font-size: 16px; }
-.asset-values .profit { font-size: 12px; font-weight: bold; }
+/* Valores dos Ativos */
+.asset-values { text-align: right; margin-top: auto; }
+.main-value { font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 4px; }
 
-.text-green { color: var(--success); }
-.text-red { color: var(--danger); }
+.profit-info { display: flex; flex-direction: column; align-items: flex-end; }
+.profit-value { font-size: 0.9rem; font-weight: 600; }
+.profit-percent { font-size: 0.75rem; opacity: 0.8; }
 
-/* Modal */
+/* Cores Utilitárias */
+.text-green { color: #00ff88; }
+.text-red { color: #ff4d4d; }
+.pill.green { background-color: rgba(0, 255, 136, 0.1); color: #00ff88; }
+.pill.red { background-color: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
+
+/* --- MODAL --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.8);
@@ -197,77 +308,10 @@ input, select {
     background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
     padding: 10px; border-radius: 8px; color: white; outline: none;
 }
-/* Barra de Cotações (Ticker) */
-.market-ticker-container {
-    display: flex;
-    gap: 15px;
-    margin: 20px auto; /* Centraliza */
-    padding: 10px 20px;
-    overflow-x: auto; /* Permite rolar se tiver muitas moedas */
-    max-width: 1200px;
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #444 transparent;
-}
-
-.market-card {
-    background-color: #1e1e2e;
-    padding: 10px 20px;
-    border-radius: 12px;
-    border: 1px solid #333;
-    min-width: 140px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    flex-shrink: 0; /* Impede o card de encolher */
-}
-
-.ticker-symbol {
-    color: #aaa;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.ticker-price {
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-/* Estilos de Lucro/Prejuízo nos Ativos */
-.asset-values {
-    text-align: right;
-}
-
-.main-value {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 4px;
-}
-
-.profit-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.profit-value {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.profit-percent {
-    font-size: 0.75rem;
-    opacity: 0.8;
-}
-
-/* Cores Utilitárias */
-.text-green { color: #00ff88; }
-.text-red { color: #ff4d4d; }
-
-.pill.green { background-color: rgba(0, 255, 136, 0.1); color: #00ff88; }
-.pill.red { background-color: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
 
 .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
 .btn-confirm { flex: 1; background: #00d26a; border: none; padding: 10px; border-radius: 8px; color: black; font-weight: bold; cursor: pointer; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; color: white; cursor: pointer; }
+
+/* Mensagens de Estado */
+.loading, .no-data { text-align: center; color: var(--text-secondary); padding: 20px; grid-column: 1 / -1; }

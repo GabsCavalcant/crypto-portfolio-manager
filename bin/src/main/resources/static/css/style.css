@@ -1,0 +1,273 @@
+:root {
+    --bg-dark: #0f0c29;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --accent: #7b4397;
+    --gradient: linear-gradient(135deg, #24243e, #302b63, #0f0c29);
+    --success: #00d26a;
+    --danger: #f72e63;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    background-image: var(--gradient);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+/* Container Principal */
+.app-container {
+    width: 100%;
+    max-width: 480px; /* Estilo Mobile/App */
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 24px;
+    background: -webkit-linear-gradient(#fff, #a0a0b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-new {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+.btn-new:hover { background: rgba(255,255,255,0.2); }
+
+/* Cartão Principal (Wallet) */
+.wallet-card {
+    background: linear-gradient(135deg, #7b4397, #dc2430);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(220, 36, 48, 0.3);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.card-label { font-size: 12px; opacity: 0.8; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+.wallet-card h1 { margin: 0 0 20px 0; font-size: 36px; font-weight: 600; }
+
+.card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+.card-footer p { margin: 0; font-weight: 600; font-size: 18px; }
+
+.pill {
+    background: rgba(0,0,0,0.2);
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 14px !important;
+}
+
+.wallet-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#wallet-select {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+#wallet-select option {
+    background: #1e1e2f; /* Cor de fundo das opções para não ficar transparente */
+    color: white;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: #00d26a;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s;
+}
+.btn-icon:hover { transform: scale(1.2); }
+
+/* Grid de Ativos */
+.section-title { font-size: 18px; margin-bottom: 15px; color: var(--text-secondary); }
+
+.assets-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.asset-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+}
+
+.asset-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+
+.asset-icon {
+    width: 45px; height: 45px;
+    background: linear-gradient(45deg, #302b63, #24243e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+.asset-info h4 { margin: 0; font-size: 16px; }
+.asset-info span { font-size: 12px; color: var(--text-secondary); }
+
+.asset-values { text-align: right; }
+.asset-values h4 { margin: 0; font-size: 16px; }
+.asset-values .profit { font-size: 12px; font-weight: bold; }
+
+.text-green { color: var(--success); }
+.text-red { color: var(--danger); }
+
+/* Modal */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal {
+    background: #1e1e2f;
+    padding: 25px;
+    border-radius: 20px;
+    width: 90%; max-width: 350px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--text-secondary); }
+input, select {
+    width: 100%; box-sizing: border-box;
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px; border-radius: 8px; color: white; outline: none;
+}
+/* Barra de Cotações (Ticker) */
+.market-ticker-container {
+    display: flex;
+    gap: 15px;
+    margin: 20px auto; /* Centraliza */
+    padding: 10px 20px;
+    overflow-x: auto; /* Permite rolar se tiver muitas moedas */
+    max-width: 1200px;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #444 transparent;
+}
+
+.market-card {
+    background-color: #1e1e2e;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    min-width: 140px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    flex-shrink: 0; /* Impede o card de encolher */
+}
+
+.ticker-symbol {
+    color: #aaa;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.ticker-price {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Estilos de Lucro/Prejuízo nos Ativos */
+.asset-values {
+    text-align: right;
+}
+
+.main-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.profit-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profit-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.profit-percent {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* Cores Utilitárias */
+.text-green { color: #00ff88; }
+.text-red { color: #ff4d4d; }
+
+.pill.green { background-color: rgba(0, 255, 136, 0.1); color: #00ff88; }
+.pill.red { background-color: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
+
+.modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+.btn-confirm { flex: 1; background: #00d26a; border: none; padding: 10px; border-radius: 8px; color: black; font-weight: bold; cursor: pointer; }
+.btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; color: white; cursor: pointer; }
